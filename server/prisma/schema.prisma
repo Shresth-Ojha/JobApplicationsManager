@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  passwordHash          String
+  firstName             String?
+  lastName              String?
+  profilePictureUrl     String?
+  resumeUrl             String?
+  phone                 String?
+  addressLine1          String?
+  addressLine2          String?
+  city                  String?
+  state                 String?
+  country               String?
+  postalCode            String?
+  education             Json?     // Array of education entries stored as JSON
+  experience            Json?     // Array of experience entries stored as JSON
+  emailVerified         Boolean   @default(false)
+  verificationToken     String?
+  resetToken            String?
+  resetTokenExpires     DateTime?
+  failedLoginAttempts   Int       @default(0)
+  lockedUntil           DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  deletedAt             DateTime?
+
+  applications          Application[]
+  tags                  Tag[]
+
+  @@map("users")
+}
+
+model Application {
+  id              String             @id @default(uuid())
+  userId          String
+  companyName     String
+  positionTitle   String
+  jobDescription  String?
+  jobUrl          String?
+  applicationDate DateTime           @default(now())
+  status          ApplicationStatus  @default(APPLIED)
+  salaryMin       Float?
+  salaryMax       Float?
+  salaryCurrency  String?            @default("USD")
+  locationCity    String?
+  locationCountry String?
+  locationType    LocationType?
+  source          String?
+  priority        PriorityLevel      @default(MEDIUM)
+  notes           String?
+  recruiterName   String?
+  recruiterEmail  String?
+  recruiterPhone  String?
+  
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  deletedAt       DateTime?
+
+  user            User               @relation(fields: [userId], references: [id])
+  history         ApplicationHistory[]
+  files           File[]
+  tags            ApplicationTag[]
+
+  @@map("applications")
+}
+
+model ApplicationHistory {
+  id            String            @id @default(uuid())
+  applicationId String
+  status        ApplicationStatus
+  notes         String?
+  createdAt     DateTime          @default(now())
+
+  application   Application       @relation(fields: [applicationId], references: [id])
+
+  @@map("application_history")
+}
+
+model Tag {
+  id     String @id @default(uuid())
+  userId String
+  name   String
+  color  String
+
+  user         User             @relation(fields: [userId], references: [id])
+  applications ApplicationTag[]
+
+  @@map("tags")
+}
+
+model ApplicationTag {
+  applicationId String
+  tagId         String
+
+  application Application @relation(fields: [applicationId], references: [id])
+  tag         Tag         @relation(fields: [tagId], references: [id])
+
+  @@id([applicationId, tagId])
+  @@map("application_tags")
+}
+
+model File {
+  id            String   @id @default(uuid())
+  applicationId String
+  fileName      String
+  fileType      String
+  fileSize      Int
+  fileUrl       String
+  uploadedAt    DateTime @default(now())
+
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  @@map("files")
+}
+
+enum ApplicationStatus {
+  APPLIED
+  SCREENING
+  PHONE_INTERVIEW
+  TECHNICAL_INTERVIEW
+  ONSITE_INTERVIEW
+  OFFER_RECEIVED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum LocationType {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+}

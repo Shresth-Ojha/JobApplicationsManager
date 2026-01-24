@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: job_tracker_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: jobtracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d jobtracker" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  adminer:
+    image: adminer
+    container_name: job_tracker_adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+    restart: always
+
+  backend:
+    build: ./server
+    container_name: job_tracker_backend
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/jobtracker?schema=public
+      JWT_SECRET: supersecretjwtkey
+      JWT_REFRESH_SECRET: supersecretrefreshjwtkey
+    command: sh -c "npm uninstall bcrypt && npm install bcrypt && npx prisma generate && npx prisma migrate deploy && npm run dev"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  frontend:
+    build: ./client
+    container_name: job_tracker_frontend
+    environment:
+      VITE_API_URL: http://localhost:3000/api/v1
+    ports:
+      - "5555:5555"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+
+
+networks:
+  app-network:
+    driver: bridge
