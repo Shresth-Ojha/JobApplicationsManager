@@ -72,16 +72,6 @@ function ExpandableNotes({ notes, query }: { notes: string; query: string }) {
     )
 }
 
-function StatusBadge({ status }: { status: string }) {
-    const opt = STATUS_OPTIONS.find(s => s.value === status)
-    return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white ${opt?.color || 'bg-gray-500'}`}>
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
-            {status.replace(/_/g, ' ')}
-        </span>
-    )
-}
-
 // Interactive status dropdown for quick updates
 function StatusDropdown({ application, onStatusChange }: { application: Application; onStatusChange: (id: string, status: string) => Promise<void> }) {
     const [isOpen, setIsOpen] = useState(false)
