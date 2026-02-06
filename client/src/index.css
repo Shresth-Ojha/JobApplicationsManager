@@ -4,33 +4,33 @@
 
 @layer base {
   :root {
-    /* Softer, warmer light mode - cream/off-white aesthetic */
+    /* Softer, warmer light mode - cream/off-white aesthetic with high contrast text */
     --background: 40 25% 94%;
-    --foreground: 220 20% 20%;
+    --foreground: 220 25% 10%;
 
     --card: 40 20% 96%;
-    --card-foreground: 220 20% 20%;
+    --card-foreground: 220 25% 10%;
 
     --popover: 40 20% 96%;
-    --popover-foreground: 220 20% 20%;
+    --popover-foreground: 220 25% 10%;
 
     --primary: 220 70% 50%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 15% 92%;
-    --secondary-foreground: 220 20% 25%;
+    --secondary-foreground: 220 25% 15%;
 
     --muted: 220 15% 93%;
-    --muted-foreground: 220 10% 50%;
+    --muted-foreground: 220 15% 35%;
 
     --accent: 220 15% 92%;
-    --accent-foreground: 220 20% 25%;
+    --accent-foreground: 220 25% 15%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
+    --border: 220 15% 75%;
+    --input: 220 15% 75%;
     --ring: 220 70% 50%;
 
     --radius: 0.75rem;

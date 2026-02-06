@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 5555
 
-CMD ["npm", "run", "dev", "--", "--host", "--port", "5555"]
+CMD ["npm", "run", "dev"]

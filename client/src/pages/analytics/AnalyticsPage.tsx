@@ -80,13 +80,10 @@ export default function AnalyticsPage() {
                                     <XAxis
                                         dataKey="name"
                                         stroke="#888888"
-                                        fontSize={12}
+                                        fontSize={11}
                                         tickLine={false}
                                         axisLine={false}
                                         interval={0}
-                                        angle={-45}
-                                        textAnchor="end"
-                                        height={70}
                                     />
                                     <YAxis
                                         stroke="#888888"

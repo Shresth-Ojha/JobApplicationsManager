@@ -73,7 +73,14 @@ export default function LoginPage() {
                     <div className="p-2.5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20">
                         <Briefcase className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">CareerFlow</span>
+                    <span className="text-xl font-bold">
+                        <span className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">J</span>
+                        <span className="text-white">ob </span>
+                        <span className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">A</span>
+                        <span className="text-white">pplications </span>
+                        <span className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">M</span>
+                        <span className="text-white">anager</span>
+                    </span>
                 </div>
 
                 {/* Main Content */}
@@ -108,7 +115,7 @@ export default function LoginPage() {
 
                 {/* Footer */}
                 <div className="relative z-10 pt-8">
-                    <p className="text-sm text-slate-500">© 2026 CareerFlow Inc. All rights reserved.</p>
+                    <p className="text-sm text-slate-500">© 2026 JAM Inc. All rights reserved.</p>
                 </div>
             </div>
 
@@ -123,7 +130,14 @@ export default function LoginPage() {
                             <div className="p-2.5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20">
                                 <Briefcase className="w-6 h-6 text-white" />
                             </div>
-                            <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">CareerFlow</span>
+                            <span className="text-xl font-bold">
+                                <span className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">J</span>
+                                <span className="text-white">ob </span>
+                                <span className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">A</span>
+                                <span className="text-white">pplications </span>
+                                <span className="text-3xl bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">M</span>
+                                <span className="text-white">anager</span>
+                            </span>
                         </div>
                     </div>
 
