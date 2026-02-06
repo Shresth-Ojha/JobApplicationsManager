@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useRef } from "react"
 import { Plus, LayoutGrid, LayoutList, ExternalLink, Search, Filter, ChevronDown, ChevronUp, Calendar, Building2, StickyNote, Download, FileText, FileSpreadsheet } from "lucide-react"
 import { Link } from "react-router-dom"
 import { applicationService } from "@/services/applicationService"
@@ -82,6 +82,81 @@ function StatusBadge({ status }: { status: string }) {
     )
 }
 
+// Interactive status dropdown for quick updates
+function StatusDropdown({ application, onStatusChange }: { application: Application; onStatusChange: (id: string, status: string) => Promise<void> }) {
+    const [isOpen, setIsOpen] = useState(false)
+    const [isUpdating, setIsUpdating] = useState(false)
+    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+    const buttonRef = useRef<HTMLButtonElement>(null)
+    const currentOpt = STATUS_OPTIONS.find(s => s.value === application.status)
+
+    const handleStatusChange = async (newStatus: string) => {
+        if (newStatus === application.status) {
+            setIsOpen(false)
+            return
+        }
+        setIsUpdating(true)
+        try {
+            await onStatusChange(application.id, newStatus)
+        } finally {
+            setIsUpdating(false)
+            setIsOpen(false)
+        }
+    }
+
+    const handleToggle = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        if (!isOpen && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect()
+            setDropdownPosition({
+                top: rect.bottom + 4,
+                left: rect.left
+            })
+        }
+        setIsOpen(!isOpen)
+    }
+
+    return (
+        <div className="relative">
+            <button
+                ref={buttonRef}
+                onClick={handleToggle}
+                disabled={isUpdating}
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white transition-all hover:ring-2 hover:ring-offset-1 hover:ring-primary/50 ${currentOpt?.color || 'bg-gray-500'} ${isUpdating ? 'opacity-60' : ''}`}
+            >
+                {isUpdating ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+                )}
+                {application.status.replace(/_/g, ' ')}
+                <ChevronDown className="w-3 h-3" />
+            </button>
+            {isOpen && (
+                <>
+                    <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)} />
+                    <div
+                        className="fixed z-[101] bg-popover border rounded-lg shadow-xl py-1 min-w-[180px]"
+                        style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
+                    >
+                        {STATUS_OPTIONS.filter(opt => opt.value !== 'ALL').map((opt) => (
+                            <button
+                                key={opt.value}
+                                onClick={(e) => { e.stopPropagation(); handleStatusChange(opt.value) }}
+                                className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted transition-colors text-left ${opt.value === application.status ? 'bg-muted font-medium' : ''
+                                    }`}
+                            >
+                                <span className={`w-2.5 h-2.5 rounded-full ${opt.color}`}></span>
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    )
+}
+
 export default function ApplicationsPage() {
     const [applications, setApplications] = useState<Application[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -104,6 +179,13 @@ export default function ApplicationsPage() {
         } finally {
             setIsLoading(false)
         }
+    }
+
+    const handleStatusChange = async (id: string, newStatus: string) => {
+        await applicationService.update(id, { status: newStatus as any })
+        setApplications(prev => prev.map(app =>
+            app.id === id ? { ...app, status: newStatus as any } : app
+        ))
     }
 
     const processedApplications = useMemo(() => {
@@ -298,7 +380,7 @@ export default function ApplicationsPage() {
                                             <HighlightText text={app.positionTitle} query={searchQuery} />
                                         </p>
                                     </div>
-                                    <StatusBadge status={app.status} />
+                                    <StatusDropdown application={app} onStatusChange={handleStatusChange} />
                                 </div>
                             </CardHeader>
                             <CardContent className="pt-0 space-y-3 flex-1">
@@ -334,6 +416,7 @@ export default function ApplicationsPage() {
                         <table className="w-full">
                             <thead>
                                 <tr className="border-b bg-muted/50">
+                                    <th className="h-12 px-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Company</th>
                                     <th className="h-12 px-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Position</th>
                                     <th className="h-12 px-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
                                     <th className="h-12 px-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden md:table-cell">Location</th>
@@ -346,24 +429,23 @@ export default function ApplicationsPage() {
                                 {processedApplications.map((app, idx) => (
                                     <tr key={app.id} className={`border-b last:border-0 hover:bg-muted/30 transition-colors ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
                                         <td className="p-4">
-                                            <div className="space-y-1">
-                                                <div className="font-medium">
-                                                    <HighlightText text={app.companyName} query={searchQuery} />
-                                                </div>
-                                                <div className="text-sm text-muted-foreground flex items-center gap-2">
-                                                    <Building2 className="h-3.5 w-3.5" />
-                                                    <HighlightText text={app.positionTitle} query={searchQuery} />
-                                                </div>
-                                                {app.jobUrl && (
-                                                    <a href={app.jobUrl} target="_blank" rel="noopener noreferrer"
-                                                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1">
-                                                        <ExternalLink className="h-3 w-3" /> Job Posting
-                                                    </a>
-                                                )}
+                                            <div className="font-medium">
+                                                <HighlightText text={app.companyName} query={searchQuery} />
+                                            </div>
+                                            {app.jobUrl && (
+                                                <a href={app.jobUrl} target="_blank" rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1">
+                                                    <ExternalLink className="h-3 w-3" /> Job Posting
+                                                </a>
+                                            )}
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="text-sm font-medium">
+                                                <HighlightText text={app.positionTitle} query={searchQuery} />
                                             </div>
                                         </td>
                                         <td className="p-4">
-                                            <StatusBadge status={app.status} />
+                                            <StatusDropdown application={app} onStatusChange={handleStatusChange} />
                                         </td>
                                         <td className="p-4 hidden md:table-cell text-sm text-muted-foreground">{app.locationCity || 'Remote'}</td>
                                         <td className="p-4 hidden lg:table-cell text-sm text-muted-foreground">{new Date(app.applicationDate).toLocaleDateString()}</td>

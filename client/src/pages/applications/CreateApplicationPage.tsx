@@ -17,6 +17,7 @@ const formSchema = z.object({
     jobUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
     locationCity: z.string().optional(),
     notes: z.string().optional(),
+    applicationDate: z.string().min(1, "Application date is required"),
     status: z.enum(['APPLIED', 'SCREENING', 'PHONE_INTERVIEW', 'TECHNICAL_INTERVIEW', 'ONSITE_INTERVIEW', 'OFFER_RECEIVED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN']),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
 })
@@ -31,7 +32,8 @@ export default function CreateApplicationPage() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             status: 'APPLIED',
-            priority: 'MEDIUM'
+            priority: 'MEDIUM',
+            applicationDate: new Date().toISOString().split('T')[0],
         }
     })
 
@@ -74,6 +76,24 @@ export default function CreateApplicationPage() {
                             <Label htmlFor="jobUrl">Job Posting URL (Optional)</Label>
                             <Input id="jobUrl" {...register("jobUrl")} />
                             {errors.jobUrl && <p className="text-red-500 text-xs">{errors.jobUrl.message}</p>}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="locationCity">Location (Optional)</Label>
+                                <Input id="locationCity" {...register("locationCity")} placeholder="City, Country" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="applicationDate">Applied Date</Label>
+                                <input
+                                    id="applicationDate"
+                                    type="date"
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden"
+                                    onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
+                                    {...register("applicationDate")}
+                                />
+                                {errors.applicationDate && <p className="text-red-500 text-xs">{errors.applicationDate.message}</p>}
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">

@@ -15,10 +15,19 @@ export default function Sidebar() {
     const user = useAuthStore((state) => state.user)
 
     return (
-        <aside className="w-64 border-r bg-card hidden md:flex flex-col">
-            <div className="h-16 flex items-center px-6 border-b">
-                <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                    JobTracker
+        <aside className="w-80 bg-card hidden md:flex flex-col">
+            <div className="h-16 flex items-center px-4 border-b gap-3">
+                {/* Logo icon */}
+                <div className="p-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl shadow-md flex-shrink-0">
+                    <Briefcase className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base font-bold whitespace-nowrap">
+                    <span className="text-xl text-blue-700 dark:text-blue-400 font-extrabold">J</span>
+                    <span className="text-foreground">ob </span>
+                    <span className="text-xl text-blue-700 dark:text-blue-400 font-extrabold">A</span>
+                    <span className="text-foreground">pplications </span>
+                    <span className="text-xl text-blue-700 dark:text-blue-400 font-extrabold">M</span>
+                    <span className="text-foreground">anager</span>
                 </span>
             </div>
 

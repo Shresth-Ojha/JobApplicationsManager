@@ -47,55 +47,67 @@ function Dashboard() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
-            <Briefcase className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalApplications || 0}</div>
-            <p className="text-xs text-muted-foreground">tracked jobs</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Applications</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {stats?.byStatus.reduce((acc, curr) =>
-                ['APPLIED', 'SCREENING', 'PHONE_INTERVIEW', 'TECHNICAL_INTERVIEW', 'ONSITE_INTERVIEW'].includes(curr.status)
-                  ? acc + curr.count : acc, 0) || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">in progress</p>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Constrained container for aligned cards */}
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="grid gap-6 grid-cols-2">
+          <Card className="p-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
+              <Briefcase className="h-5 w-5 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold">{stats?.totalApplications || 0}</div>
+              <p className="text-sm text-muted-foreground mt-1">tracked jobs</p>
+              <p className="text-xs text-muted-foreground mt-3 italic">
+                "Every application is a step closer to your dream job."
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="p-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Applications</CardTitle>
+              <TrendingUp className="h-5 w-5 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold">
+                {stats?.byStatus.reduce((acc, curr) =>
+                  ['APPLIED', 'SCREENING', 'PHONE_INTERVIEW', 'TECHNICAL_INTERVIEW', 'ONSITE_INTERVIEW'].includes(curr.status)
+                    ? acc + curr.count : acc, 0) || 0}
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">in progress</p>
+              <p className="text-xs text-muted-foreground mt-3 italic">
+                "Success is not final, failure is not fatal."
+              </p>
+            </CardContent>
+          </Card>
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 run-zoom-in">
+        <Card className="p-2">
           <CardHeader>
             <CardTitle>Recent Applications</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentApps.map(app => (
-                <div key={app.id} className="flex items-center justify-between border-b pb-2 last:border-0 last:pb-0">
+                <div key={app.id} className="flex items-center justify-between border-b pb-3 last:border-0 last:pb-0">
                   <div>
-                    <p className="font-medium text-sm">{app.positionTitle}</p>
-                    <p className="text-xs text-muted-foreground">{app.companyName}</p>
+                    <p className="font-medium">{app.positionTitle}</p>
+                    <p className="text-sm text-muted-foreground">{app.companyName}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">
+                    <span className="text-xs px-3 py-1 rounded-full bg-secondary text-secondary-foreground">
                       {app.status.replace('_', ' ')}
                     </span>
                   </div>
                 </div>
               ))}
               {recentApps.length === 0 && (
-                <p className="text-sm text-muted-foreground">No recent activity.</p>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No recent activity.</p>
+                  <p className="text-sm text-muted-foreground mt-2 italic">
+                    "The only way to do great work is to love what you do." — Steve Jobs
+                  </p>
+                </div>
               )}
             </div>
           </CardContent>
