@@ -1,7 +1,7 @@
-# Job Application Tracker - Full Stack Web Application
+# Job Applications Manager (JAM) - Full Stack Web Application
 
 ## Project Overview
-Build a production-grade job application tracking web application that helps job seekers manage their application pipeline from initial application to final outcome. The system should be secure, scalable, and provide an excellent user experience with modern UI/UX patterns.
+Build a production-grade job applications management web application that helps job seekers manage their application pipeline from initial application to final outcome. The system should be secure, scalable, and provide an excellent user experience with modern UI/UX patterns.
 
 ## Technology Stack Requirements
 
@@ -431,7 +431,7 @@ files:
 #### Frontend (.env)
 ```
 VITE_API_URL=http://localhost:3000
-VITE_APP_NAME=JobTracker
+VITE_APP_NAME=JobManager
 VITE_ENABLE_ANALYTICS=false
 ```
 
@@ -439,7 +439,7 @@ VITE_ENABLE_ANALYTICS=false
 ```
 NODE_ENV=development
 PORT=3000
-DATABASE_URL=postgresql://user:pass@localhost:5432/jobtracker
+DATABASE_URL=postgresql://user:pass@localhost:5432/jobmanager
 JWT_SECRET=your-secret-key
 JWT_REFRESH_SECRET=your-refresh-secret
 JWT_EXPIRES_IN=7d

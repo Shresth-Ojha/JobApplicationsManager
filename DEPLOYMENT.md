@@ -1,4 +1,4 @@
-# Deployment Guide - Job Applications Tracker
+# Deployment Guide - Job Applications Manager (JAM)
 
 This guide covers deploying your app using **free tiers** of Vercel, Render, and Supabase.
 
@@ -36,7 +36,7 @@ postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
 2. Click **New → Web Service**
 3. Connect your GitHub repository
 4. Configure:
-   - **Name:** `job-tracker-api`
+   - **Name:** `job-manager-api`
    - **Root Directory:** `server`
    - **Runtime:** `Node`
    - **Build Command:** `npm install && npx prisma generate && npm run build`
@@ -58,7 +58,7 @@ postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
    - Go to **Shell** tab
    - Run: `npx prisma migrate deploy`
 
-8. Copy your Render URL (e.g., `https://job-tracker-api.onrender.com`)
+8. Copy your Render URL (e.g., `https://job-manager-api.onrender.com`)
 
 ---
 
@@ -73,7 +73,7 @@ postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
 
 5. Add Environment Variable:
    ```
-   VITE_API_URL=https://job-tracker-api.onrender.com/api/v1
+   VITE_API_URL=https://job-manager-api.onrender.com/api/v1
    ```
 
 6. Click **Deploy**
