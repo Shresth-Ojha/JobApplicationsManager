@@ -1,7 +1,7 @@
 {
-    "name": "job-tracker-server",
+    "name": "job-manager-server",
     "version": "1.0.0",
-    "description": "Backend for Job Application Tracker",
+    "description": "Backend for Job Applications Manager (JAM)",
     "main": "dist/app.js",
     "scripts": {
         "start": "node dist/app.js",

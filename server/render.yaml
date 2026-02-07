@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: job-tracker-api
+    name: job-manager-api
     runtime: node
     plan: free
     buildCommand: npm install && npx prisma generate && npm run build
