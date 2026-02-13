@@ -19,7 +19,6 @@ const migrateGuestApplications = () => {
     if (applications.length === 0) return;
 
     let needsSave = false;
-    const now = new Date().toISOString();
 
     for (const app of applications) {
         if (app.reminderEnabled === undefined) {
@@ -31,7 +30,7 @@ const migrateGuestApplications = () => {
             needsSave = true;
         }
         if (!app.lastReminderAck) {
-            app.lastReminderAck = now;
+            app.lastReminderAck = app.updatedAt;
             needsSave = true;
         }
     }
