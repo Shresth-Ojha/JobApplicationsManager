@@ -13,36 +13,6 @@ const saveApplications = (applications: Application[]) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
 };
 
-// Migrate old guest applications that don't have reminder fields
-const migrateGuestApplications = () => {
-    const applications = getStoredApplications();
-    if (applications.length === 0) return;
-
-    let needsSave = false;
-
-    for (const app of applications) {
-        if (app.reminderEnabled === undefined) {
-            app.reminderEnabled = true;
-            needsSave = true;
-        }
-        if (app.reminderDays === undefined) {
-            app.reminderDays = 7;
-            needsSave = true;
-        }
-        if (!app.lastReminderAck) {
-            app.lastReminderAck = app.updatedAt;
-            needsSave = true;
-        }
-    }
-
-    if (needsSave) {
-        saveApplications(applications);
-    }
-};
-
-// Run migration on module load
-migrateGuestApplications();
-
 export const guestApplicationService = {
     async getAll(): Promise<Application[]> {
         return getStoredApplications();
