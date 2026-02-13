@@ -21,7 +21,7 @@ export interface Application {
     updatedAt: string;
 }
 
-export type CreateApplicationDTO = Omit<Application, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'applicationDate' | 'lastReminderAck'> & {
+export type CreateApplicationDTO = Omit<Application, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'applicationDate' | 'lastReminderAck' | 'reminderEnabled' | 'reminderDays'> & {
     applicationDate?: string;
     reminderEnabled?: boolean;
     reminderDays?: number;
