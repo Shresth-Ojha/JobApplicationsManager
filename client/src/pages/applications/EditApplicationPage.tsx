@@ -28,15 +28,15 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 const STATUS_OPTIONS = [
-    { value: 'APPLIED', label: 'Applied', color: 'bg-blue-500' },
-    { value: 'SCREENING', label: 'Screening', color: 'bg-cyan-500' },
-    { value: 'PHONE_INTERVIEW', label: 'Phone Interview', color: 'bg-indigo-500' },
-    { value: 'TECHNICAL_INTERVIEW', label: 'Technical Interview', color: 'bg-purple-500' },
-    { value: 'ONSITE_INTERVIEW', label: 'Onsite Interview', color: 'bg-violet-500' },
-    { value: 'OFFER_RECEIVED', label: 'Offer Received', color: 'bg-green-500' },
-    { value: 'ACCEPTED', label: 'Accepted', color: 'bg-emerald-600' },
-    { value: 'REJECTED', label: 'Rejected', color: 'bg-red-500' },
-    { value: 'WITHDRAWN', label: 'Withdrawn', color: 'bg-gray-500' },
+    { value: 'APPLIED', label: 'Applied', color: 'bg-blue-500', hoverColor: 'hover:bg-blue-500/20 hover:text-blue-500' },
+    { value: 'SCREENING', label: 'Screening', color: 'bg-cyan-500', hoverColor: 'hover:bg-cyan-500/20 hover:text-cyan-500' },
+    { value: 'PHONE_INTERVIEW', label: 'Phone Interview', color: 'bg-indigo-500', hoverColor: 'hover:bg-indigo-500/20 hover:text-indigo-500' },
+    { value: 'TECHNICAL_INTERVIEW', label: 'Technical Interview', color: 'bg-purple-500', hoverColor: 'hover:bg-purple-500/20 hover:text-purple-500' },
+    { value: 'ONSITE_INTERVIEW', label: 'Onsite Interview', color: 'bg-violet-500', hoverColor: 'hover:bg-violet-500/20 hover:text-violet-500' },
+    { value: 'OFFER_RECEIVED', label: 'Offer Received', color: 'bg-green-500', hoverColor: 'hover:bg-green-500/20 hover:text-green-500' },
+    { value: 'ACCEPTED', label: 'Accepted', color: 'bg-emerald-600', hoverColor: 'hover:bg-emerald-600/20 hover:text-emerald-600' },
+    { value: 'REJECTED', label: 'Rejected', color: 'bg-red-500', hoverColor: 'hover:bg-red-500/20 hover:text-red-500' },
+    { value: 'WITHDRAWN', label: 'Withdrawn', color: 'bg-gray-500', hoverColor: 'hover:bg-gray-500/20 hover:text-gray-500' },
 ]
 
 export default function EditApplicationPage() {
@@ -180,7 +180,7 @@ export default function EditApplicationPage() {
                                     disabled={isSaving}
                                     className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-left whitespace-nowrap ${currentStatus === opt.value
                                         ? `${opt.color} text-white shadow-md`
-                                        : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                                        : `bg-muted/50 text-muted-foreground ${opt.hoverColor}`
                                         }`}
                                 >
                                     {opt.label}
