@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: job_manager_db
+    container_name: jam_db
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: jobmanager
+      POSTGRES_DB: jam
     ports:
       - "5432:5432"
     volumes:
@@ -15,7 +13,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U user -d jobmanager" ]
+      test: [ "CMD-SHELL", "pg_isready -U user -d jam" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -23,7 +21,7 @@ services:
 
   adminer:
     image: adminer
-    container_name: job_manager_adminer
+    container_name: jam_adminer
     ports:
       - "8080:8080"
     networks:
@@ -34,12 +32,13 @@ services:
 
   backend:
     build: ./server
-    container_name: job_manager_backend
+    image: jam-backend:latest
+    container_name: jam_backend
     environment:
-      DATABASE_URL: postgresql://user:password@postgres:5432/jobmanager?schema=public
+      DATABASE_URL: postgresql://user:password@postgres:5432/jam?schema=public
       JWT_SECRET: supersecretjwtkey
       JWT_REFRESH_SECRET: supersecretrefreshjwtkey
-    command: sh -c "npm uninstall bcrypt && npm install bcrypt && npx prisma generate && npx prisma migrate deploy && npm run dev"
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run dev"
     ports:
       - "3000:3000"
     depends_on:
@@ -47,13 +46,19 @@ services:
         condition: service_healthy
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     volumes:
       - ./server:/app
       - /app/node_modules
 
   frontend:
     build: ./client
-    container_name: job_manager_frontend
+    image: jam-frontend:latest
+    container_name: jam_frontend
     environment:
       VITE_API_URL: http://localhost:3000/api/v1
     command: sh -c "npm install && npm run dev"
@@ -63,6 +68,11 @@ services:
       - backend
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     volumes:
       - ./client:/app
       - /app/node_modules
