@@ -1,4 +1,16 @@
 # Job Applications Manager (JAM) - Full Stack Web Application
+## ⛔ CRITICAL: Git Workflow Rules (NEVER VIOLATE)
+
+> **NEVER push directly to the `main` branch. ALL changes MUST go through a Pull Request (PR).**
+
+- **NEVER** run `git push origin main` — this is a fireable offense in real teams
+- **NEVER** run `git merge <branch>` while on `main` and then push — same thing
+- **ALWAYS** create a feature branch, push to remote, and merge via GitHub PR
+- **ALWAYS** ask the user before committing or pushing — discuss changes first
+- When the user says "merge the PR", direct them to the **GitHub PR page** — do NOT merge locally
+- **ALWAYS** scan for secrets/credentials before any push to any branch
+
+---
 
 ## Project Overview
 Build a production-grade job applications management web application that helps job seekers manage their application pipeline from initial application to final outcome. The system should be secure, scalable, and provide an excellent user experience with modern UI/UX patterns.
