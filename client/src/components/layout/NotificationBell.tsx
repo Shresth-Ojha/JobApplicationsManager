@@ -64,7 +64,6 @@ export default function NotificationBell() {
                 <NotificationPanel
                     reminders={reminders}
                     onAcknowledge={handleAcknowledge}
-                    onClose={() => setIsOpen(false)}
                 />
             )}
         </div>

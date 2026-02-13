@@ -167,12 +167,12 @@ export default function EditApplicationPage() {
             {/* Two Column Layout: Status + Form */}
             <div className="flex gap-4">
                 {/* Status Pipeline - Left Column (auto width) */}
-                <Card className="shrink-0 self-start">
+                <Card className="shrink-0 flex flex-col">
                     <CardHeader className="py-3 px-4">
                         <CardTitle className="text-sm">Status</CardTitle>
                     </CardHeader>
-                    <CardContent className="px-4 pb-4 pt-0">
-                        <div className="flex flex-col gap-2">
+                    <CardContent className="px-4 pb-4 pt-0 flex-1">
+                        <div className="flex flex-col justify-between h-full">
                             {STATUS_OPTIONS.map((opt) => (
                                 <button
                                     key={opt.value}

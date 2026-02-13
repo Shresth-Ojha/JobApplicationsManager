@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Info } from "lucide-react"
 import type { DueReminder } from "@/services/reminderService"
@@ -6,17 +5,9 @@ import type { DueReminder } from "@/services/reminderService"
 interface NotificationPanelProps {
     reminders: DueReminder[]
     onAcknowledge: (id: string) => void
-    onClose: () => void
 }
 
-export default function NotificationPanel({ reminders, onAcknowledge, onClose }: NotificationPanelProps) {
-    const navigate = useNavigate()
-
-    const handleCatchUp = (reminder: DueReminder) => {
-        onAcknowledge(reminder.id)
-        onClose()
-        navigate(`/applications/${reminder.id}/edit`)
-    }
+export default function NotificationPanel({ reminders, onAcknowledge }: NotificationPanelProps) {
 
     return (
         <div className="absolute right-0 top-full z-50 mt-2 w-96 max-h-[28rem] overflow-y-auto rounded-xl border bg-card shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
@@ -29,7 +20,7 @@ export default function NotificationPanel({ reminders, onAcknowledge, onClose }:
             <div className="mx-3 mt-3 mb-2 flex items-start gap-2 rounded-lg border border-border/50 bg-muted/50 px-3 py-2">
                 <Info className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                    You can modify the notification settings for each application by editing it from the dashboard
+                    Manage reminders by editing your applications
                 </p>
             </div>
 
@@ -57,7 +48,7 @@ export default function NotificationPanel({ reminders, onAcknowledge, onClose }:
                                     size="sm"
                                     variant="default"
                                     className="flex-1 text-xs h-8"
-                                    onClick={() => handleCatchUp(reminder)}
+                                    onClick={() => onAcknowledge(reminder.id)}
                                 >
                                     Will catch-up RIGHT NOW!
                                 </Button>
