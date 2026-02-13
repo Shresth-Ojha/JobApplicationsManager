@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "applications" ADD COLUMN "reminderEnabled" BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE "applications" ADD COLUMN "reminderDays" INTEGER NOT NULL DEFAULT 7;
+ALTER TABLE "applications" ADD COLUMN "lastReminderAck" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

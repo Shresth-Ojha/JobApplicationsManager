@@ -14,12 +14,17 @@ export interface Application {
     locationCountry?: string;
     priority: 'LOW' | 'MEDIUM' | 'HIGH';
     notes?: string;
+    reminderEnabled: boolean;
+    reminderDays: number;
+    lastReminderAck: string; // ISO Date
     createdAt: string;
     updatedAt: string;
 }
 
-export type CreateApplicationDTO = Omit<Application, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'applicationDate'> & {
+export type CreateApplicationDTO = Omit<Application, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'applicationDate' | 'lastReminderAck'> & {
     applicationDate?: string;
+    reminderEnabled?: boolean;
+    reminderDays?: number;
 };
 
 export type UpdateApplicationDTO = Partial<CreateApplicationDTO>;

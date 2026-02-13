@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { useTheme } from "@/components/theme-provider"
 import { useAuthStore } from "@/store/authStore"
 import { useNavigate } from "react-router-dom"
+import NotificationBell from "./NotificationBell"
 
 export default function Topbar() {
     const { theme, setTheme } = useTheme()
@@ -17,6 +18,7 @@ export default function Topbar() {
     return (
         <header className="h-16 border-b bg-card px-6 flex items-center justify-end">
             <div className="flex items-center gap-2">
+                <NotificationBell />
                 <Button
                     variant="ghost"
                     size="icon"
