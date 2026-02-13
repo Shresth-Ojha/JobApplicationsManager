@@ -44,6 +44,9 @@ export const guestApplicationService = {
             locationCountry: data.locationCountry,
             priority: data.priority || 'MEDIUM',
             notes: data.notes,
+            reminderEnabled: data.reminderEnabled !== undefined ? data.reminderEnabled : true,
+            reminderDays: data.reminderDays || 7,
+            lastReminderAck: now,
             createdAt: now,
             updatedAt: now,
         };

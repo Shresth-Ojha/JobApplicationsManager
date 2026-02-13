@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Loader2, ExternalLink, ArrowLeft, Trash2 } from "lucide-react"
+import { Loader2, ExternalLink, ArrowLeft, Trash2, Bell } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,20 +21,22 @@ const formSchema = z.object({
     notes: z.string().optional(),
     status: z.enum(['APPLIED', 'SCREENING', 'PHONE_INTERVIEW', 'TECHNICAL_INTERVIEW', 'ONSITE_INTERVIEW', 'OFFER_RECEIVED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN']),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+    reminderEnabled: z.boolean(),
+    reminderDays: z.number().int().min(1).max(365),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
 const STATUS_OPTIONS = [
-    { value: 'APPLIED', label: 'Applied', color: 'bg-blue-500' },
-    { value: 'SCREENING', label: 'Screening', color: 'bg-cyan-500' },
-    { value: 'PHONE_INTERVIEW', label: 'Phone Interview', color: 'bg-indigo-500' },
-    { value: 'TECHNICAL_INTERVIEW', label: 'Technical Interview', color: 'bg-purple-500' },
-    { value: 'ONSITE_INTERVIEW', label: 'Onsite Interview', color: 'bg-violet-500' },
-    { value: 'OFFER_RECEIVED', label: 'Offer Received', color: 'bg-green-500' },
-    { value: 'ACCEPTED', label: 'Accepted', color: 'bg-emerald-600' },
-    { value: 'REJECTED', label: 'Rejected', color: 'bg-red-500' },
-    { value: 'WITHDRAWN', label: 'Withdrawn', color: 'bg-gray-500' },
+    { value: 'APPLIED', label: 'Applied', color: 'bg-blue-500', hoverColor: 'hover:bg-blue-500/20 hover:text-blue-500' },
+    { value: 'SCREENING', label: 'Screening', color: 'bg-cyan-500', hoverColor: 'hover:bg-cyan-500/20 hover:text-cyan-500' },
+    { value: 'PHONE_INTERVIEW', label: 'Phone Interview', color: 'bg-indigo-500', hoverColor: 'hover:bg-indigo-500/20 hover:text-indigo-500' },
+    { value: 'TECHNICAL_INTERVIEW', label: 'Technical Interview', color: 'bg-purple-500', hoverColor: 'hover:bg-purple-500/20 hover:text-purple-500' },
+    { value: 'ONSITE_INTERVIEW', label: 'Onsite Interview', color: 'bg-violet-500', hoverColor: 'hover:bg-violet-500/20 hover:text-violet-500' },
+    { value: 'OFFER_RECEIVED', label: 'Offer Received', color: 'bg-green-500', hoverColor: 'hover:bg-green-500/20 hover:text-green-500' },
+    { value: 'ACCEPTED', label: 'Accepted', color: 'bg-emerald-600', hoverColor: 'hover:bg-emerald-600/20 hover:text-emerald-600' },
+    { value: 'REJECTED', label: 'Rejected', color: 'bg-red-500', hoverColor: 'hover:bg-red-500/20 hover:text-red-500' },
+    { value: 'WITHDRAWN', label: 'Withdrawn', color: 'bg-gray-500', hoverColor: 'hover:bg-gray-500/20 hover:text-gray-500' },
 ]
 
 export default function EditApplicationPage() {
@@ -72,6 +74,8 @@ export default function EditApplicationPage() {
                 notes: data.notes || '',
                 status: data.status,
                 priority: data.priority,
+                reminderEnabled: data.reminderEnabled !== undefined ? data.reminderEnabled : true,
+                reminderDays: data.reminderDays || 7,
             })
         } catch (error) {
             console.error("Failed to load application", error)
@@ -163,12 +167,12 @@ export default function EditApplicationPage() {
             {/* Two Column Layout: Status + Form */}
             <div className="flex gap-4">
                 {/* Status Pipeline - Left Column (auto width) */}
-                <Card className="shrink-0 self-start">
+                <Card className="shrink-0 flex flex-col">
                     <CardHeader className="py-3 px-4">
                         <CardTitle className="text-sm">Status</CardTitle>
                     </CardHeader>
-                    <CardContent className="px-4 pb-4 pt-0">
-                        <div className="flex flex-col gap-2">
+                    <CardContent className="px-4 pb-4 pt-0 flex-1">
+                        <div className="flex flex-col justify-between h-full">
                             {STATUS_OPTIONS.map((opt) => (
                                 <button
                                     key={opt.value}
@@ -176,7 +180,7 @@ export default function EditApplicationPage() {
                                     disabled={isSaving}
                                     className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-left whitespace-nowrap ${currentStatus === opt.value
                                         ? `${opt.color} text-white shadow-md`
-                                        : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                                        : `bg-muted/50 text-muted-foreground ${opt.hoverColor}`
                                         }`}
                                 >
                                     {opt.label}
@@ -239,6 +243,33 @@ export default function EditApplicationPage() {
                                         {...register("notes")}
                                         placeholder="Any additional notes..."
                                     />
+                                </div>
+
+                                {/* Reminder Settings */}
+                                <div className="rounded-lg border border-border/60 p-3 space-y-2.5 bg-muted/30">
+                                    <div className="flex items-center gap-2">
+                                        <Bell className="h-3.5 w-3.5 text-muted-foreground" />
+                                        <Label className="text-xs font-medium">Follow-up Reminder</Label>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-xs text-muted-foreground">Get reminded to follow up</p>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" className="sr-only peer" {...register("reminderEnabled")} />
+                                            <div className="w-9 h-5 bg-muted rounded-full peer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+                                        </label>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label htmlFor="reminderDays" className="text-xs text-muted-foreground">Remind after (days)</Label>
+                                        <Input
+                                            id="reminderDays"
+                                            type="number"
+                                            min={1}
+                                            max={365}
+                                            className="w-24 h-8 text-sm"
+                                            {...register("reminderDays", { valueAsNumber: true })}
+                                        />
+                                        {errors.reminderDays && <p className="text-red-500 text-xs">{errors.reminderDays.message}</p>}
+                                    </div>
                                 </div>
                             </div>
 

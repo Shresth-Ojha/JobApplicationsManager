@@ -62,6 +62,10 @@ model Application {
   recruiterName   String?
   recruiterEmail  String?
   recruiterPhone  String?
+
+  reminderEnabled Boolean            @default(true)
+  reminderDays    Int                @default(7)
+  lastReminderAck DateTime           @default(now())
   
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt

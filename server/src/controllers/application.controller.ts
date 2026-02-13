@@ -13,6 +13,8 @@ const createApplicationSchema = z.object({
     notes: z.string().max(5000).optional(),
     status: z.enum(['APPLIED', 'SCREENING', 'PHONE_INTERVIEW', 'TECHNICAL_INTERVIEW', 'ONSITE_INTERVIEW', 'OFFER_RECEIVED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN']).optional(),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(),
+    reminderEnabled: z.boolean().optional(),
+    reminderDays: z.number().int().min(1).max(365).optional(),
 }).strict();
 
 const updateApplicationSchema = z.object({
@@ -29,6 +31,8 @@ const updateApplicationSchema = z.object({
     contactName: z.string().max(100).optional(),
     contactEmail: z.string().email().max(254).optional().or(z.literal('')),
     contactPhone: z.string().max(20).optional(),
+    reminderEnabled: z.boolean().optional(),
+    reminderDays: z.number().int().min(1).max(365).optional(),
 }).strict();
 
 export class ApplicationController {

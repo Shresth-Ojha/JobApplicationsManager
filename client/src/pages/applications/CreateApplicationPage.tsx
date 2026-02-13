@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Loader2 } from "lucide-react"
+import { Loader2, Bell } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +20,8 @@ const formSchema = z.object({
     applicationDate: z.string().min(1, "Application date is required"),
     status: z.enum(['APPLIED', 'SCREENING', 'PHONE_INTERVIEW', 'TECHNICAL_INTERVIEW', 'ONSITE_INTERVIEW', 'OFFER_RECEIVED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN']),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+    reminderEnabled: z.boolean(),
+    reminderDays: z.number().int().min(1).max(365),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -34,6 +36,8 @@ export default function CreateApplicationPage() {
             status: 'APPLIED',
             priority: 'MEDIUM',
             applicationDate: new Date().toISOString().split('T')[0],
+            reminderEnabled: true,
+            reminderDays: 7,
         }
     })
 
@@ -137,6 +141,33 @@ export default function CreateApplicationPage() {
                                 placeholder="Add any notes about this application..."
                                 {...register("notes")}
                             />
+                        </div>
+
+                        {/* Reminder Settings */}
+                        <div className="rounded-lg border border-border/60 p-4 space-y-3 bg-muted/30">
+                            <div className="flex items-center gap-2">
+                                <Bell className="h-4 w-4 text-muted-foreground" />
+                                <Label className="text-sm font-medium">Follow-up Reminder</Label>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <p className="text-xs text-muted-foreground">Get reminded to follow up on this application</p>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" className="sr-only peer" {...register("reminderEnabled")} />
+                                    <div className="w-9 h-5 bg-muted rounded-full peer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+                                </label>
+                            </div>
+                            <div className="space-y-1">
+                                <Label htmlFor="reminderDays" className="text-xs text-muted-foreground">Remind after (days)</Label>
+                                <Input
+                                    id="reminderDays"
+                                    type="number"
+                                    min={1}
+                                    max={365}
+                                    className="w-24 h-8 text-sm"
+                                    {...register("reminderDays", { valueAsNumber: true })}
+                                />
+                                {errors.reminderDays && <p className="text-red-500 text-xs">{errors.reminderDays.message}</p>}
+                            </div>
                         </div>
 
                         <div className="flex justify-end gap-2 pt-4">

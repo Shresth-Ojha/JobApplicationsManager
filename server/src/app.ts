@@ -21,10 +21,12 @@ app.get('/api/health', (req: Request, res: Response) => {
 import authRoutes from './routes/auth.routes';
 import applicationRoutes from './routes/application.routes';
 import analyticsRoutes from './routes/analytics.routes';
+import reminderRoutes from './routes/reminder.routes';
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/applications', applicationRoutes);
 app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/reminders', reminderRoutes);
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
